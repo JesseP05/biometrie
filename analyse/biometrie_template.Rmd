@@ -180,7 +180,7 @@ ggplot(data = res_data,
 Hoe kleiner de steekproefgrootte (*sample size*) hoe lastiger het is de onderliggende verdeling vast te stellen. Speel maar eens met dit blokje code, en verander de steekproefgrootte (`n=`) in de `rnorm()` functie en de `breaks=` in de `hist()` functie. Neem voor *n* bijvoorbeeld achtereenvolgens 10, 100, 1000, 10000, 10000 en voor *breaks* 5, 10, 50. Wanneer zie je een echte normaalverdeling verschijnen?
 
 ```{r sampling-demo, fig.asp=.6, out.width='60%', fig.align='center'}
-hist_data <- data.frame(x = rnorm(n = 100))
+hist_data <- data.frame(x = rnorm(n = 1000))
 ggplot(data = hist_data,
        mapping = aes(x = x)) +
     geom_histogram(bins = 10, fill = "gold", colour = "black") +
@@ -192,10 +192,19 @@ ggplot(data = hist_data,
 Beantwoord deze vragen:
 
 1.  Wat gebeurt er met de vorm van de verdeling als `n` groter wordt?
+  > De nauwkeurigheid van de "kleinere" assen wordt verloren.
+
 2.  Wat gebeurt er met de spreiding van de data (x-as) als `n` groter wordt, en kan je dat verklaren?
+  > De spreiding blijft vrijwel gelijk doordat die bepaalt word door de standard deviation van de normale verdeling. Grotere n betekend alleen gladdere grafiek.
+
 3.  Waarom is bij zelfde instellingen voor `n` en `breaks` de uitkomst toch verschillend?
+  > Omdat elke keer nieuwe data wordt gegenereerd.
+
 4.  Welke minimale `n` geeft het meeste kans om een echte normaalverdeling te zien?
+  > Vanaf ~ n = 1000 begint er een normale distributie te verschijnen.
+
 5.  Wat voor bijzonders is er aan de hand met het `breaks` argument? Geeft de documentatie daar een verklaring voor?
+> Er staat dat R zelf mooie grenzen voor de bins aanneemt dus niet expliciet wat je meegeeft als variabele.
 :::
 
 ### Bronnen van variatie
