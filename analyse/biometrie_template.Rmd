@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 
 ```
-Authors: Jesse Postma 507655, Robin Offringa 468620, Tristan Kruithof 508757
+Authors: Jesse Postma 507655, Robin Offringa 468640, Tristan Kruithof 508757
 
 ## Inleiding
 
@@ -54,74 +54,40 @@ We maken 20 metingen per groep, dus 40 samples in totaal.
 
 ### Ontwerp het protocol
 
-#### Doel
+#### Protocol voor meting armlengte en lichaamslengte
 We willen kijken of er verschil is tussen mannen en vrouwen in de verhouding tussen armlengte en lichaamslengte.
 
-#### Wat meten we?
-- lichaamslengte in cm
-- armlengte in cm
-- gender
-- meter-ID
-- subject-ID
+##### Benodigdheden
 
-#### Wat hebben we nodig?
-- meetlint
-- spreadsheet om data op te schrijven
-- proefpersonen
+1.  meetlint
+2.  spreadsheet om data op te schrijven
+3.  proefpersonen
 
-#### Hoe meten we?
-1. Geef elke proefpersoon een subject-ID.
-2. Vraag of de persoon mee wil doen.
-3. Meet eerst de lichaamslengte.
-5. Meet daarna de armlengte.
-6. Laat de arm op schouderhoogte uitstrekken.
-8. Laat de tweede meter dezelfde persoon ook meten.
+##### Data verzamelen
 
-#### Afspraken
+1.  Geef elke proefpersoon een subject-ID.
+2.  Vraag of de persoon mee wil doen.
+3.  Meet eerst de lichaamslengte.
+4.  Meet daarna de armlengte.
+5.  Laat de arm op schouderhoogte uitstrekken.
+6.  Laat de tweede meter dezelfde persoon ook meten.
+
+##### Afspraken
+
 - Gebruik steeds dezelfde meet afspraken.
 - Meet zo precies mogelijk.
 - Zet geen namen in de data.
 - Gebruik alleen een subject-ID.
 - Wissel af zodat iedereen evenveel meet.
 
-#### Controle
+##### Controle
+
 Aan het einde kijken we of alles klopt.
+
 - Zijn er genoeg metingen?
 - Zijn de subject-ID's uniek?
 - Zitten er rare waarden tussen?
 - Zijn de metingen van de twee meters ongeveer gelijk?
-
-##### Benodigdheden
-
-1.  Schuifmaat of meetlint.
-2.  Spreadsheet om resultaten vast te leggen, met toegang hiertoe op locaties zonder internet-toegang.
-3.  Je laborant-ID: een unieke *identifier* die jou als onderzoeker identificeert. Neem hiervoor je studentnummer.
-
-##### Data verzamelen
-
-Zoek, samen met een ander groepje van je klas, in of rond het schoolgebouw medestudenten die willen deelnemen aan het onderzoek. Leg kort uit dat jullie voor een schoolopdracht de armlengte en lichaamslengte meten en dat alle gegevens anoniem worden opgeslagen.
-
-Is het antwoord nee, dan bedank je vriendelijk en zoek je verder. Is het antwoord ja, dan wijs je de proefpersoon een rustige plek aan waar de meting kan plaatsvinden.
-
-Vraag de proefpersoon om:
-
-Rechtop te gaan staan tegen een muur of meetlat, met hakken tegen de grond. Meet vervolgens de lichaamslengte in centimeters en noteer deze in de spreadsheet.
-
-Daarna vraagt je de proefpersoon om de arm zijwaarts te strekken op schouderhoogte. Meet de armlengte van het schouderpunt (acromion) tot de pols (carpal bot pisiform), opnieuw in centimeters.
-
-Leg beide waarden vast in de spreadsheet, samen met:
-
-je laborant-ID,
-
-een subject-ID (géén naam),
-
-de sexe van de proefpersoon (m/v/anders/onbekend).
-
-Het parallelle groepje voert dezelfde metingen uit bij dezelfde proefpersonen, zonder jullie resultaten te horen, en gebruikt daarbij dezelfde subject-ID’s.
-
-Bedank de proefpersoon voor deelname. Wissel de metingen af tussen de laboranten in jullie groepje om meetfouten te verminderen.
-
-Ga door totdat er voldoende gegevens zijn verzameld voor beide doelgroepen.
 
 ## Uitvoering
 
@@ -144,8 +110,8 @@ m; 191, 54, 507656, 2
 
 Om data vanuit een tekstbestand in te lezen kan je dit codeblok gebruiken, aannemend dat je data er exact zo uitzien als in bovenstaande voorbeeld:
 
-```{r demo-data-inlees, echo=FALSE}
-data_file <- "meten.csv"
+```{r demo-data-inlees, eval=FALSE}
+data_file <- "C:/Users/jesse/Documents/Code/4_semester/meten.csv"
 
 #data format: gender;lengte;l arm;meter;Id
 res_data <- read.table(file = data_file,
@@ -160,7 +126,7 @@ Je hebt je data verzameld en ingelezen. Nu is het tijd om er een eerste verkenni
 
 Allereerst berekenen we de lengte/arm-lengte ratio, want dat was de onderzoeksvraag. Onderstaande code voegt een extra kolom toe aan de dataframe.
 
-```{r lab-head-blegh, echo=FALSE}
+```{r lab-head-blegh, eval=FALSE}
   res_data$ratio <- res_data$lengte / res_data$"l.arm"
   head(res_data)
 ```
@@ -168,7 +134,7 @@ Dit geeft per subject een ratio tussen de lengte en de armlengte.
 
 Dan kunnen we nog kijken naar de gemiddelde lengte en armlengte per gender:
 
-```{r lab-split, echo=FALSE}
+```{r lab-split, eval=FALSE}
 #split over gender into list of dataframes
 gender_split_data <- split(x = res_data,
                            f = res_data$gender)
@@ -182,7 +148,7 @@ sapply(X = gender_split_data,
        })
 ```
 
-```{r, echo=FALSE}
+```{r, eval=FALSE}
 library(ggplot2)
 # maak de plot en voeg lagen toe
 ggplot(data = res_data,
@@ -191,7 +157,7 @@ ggplot(data = res_data,
     labs(x = "Gender", y = "Arm length (cm)") +  # as-labels
     theme_minimal()                             # beetje schoner plotje maken
 ```
-``` {r echo=FALSE}
+``` {r eval=FALSE}
 ggplot(data = res_data,
        mapping = aes(x = gender, y = lengte, fill = gender)) +
     geom_boxplot() +                            # boxplot visualisatie
@@ -201,7 +167,7 @@ ggplot(data = res_data,
 ```
 Deze plots geven weer dat er wel een degelijk verschil tussen de groepen is.
 
-``` {r, echo=F}
+``` {r, eval=FALSE}
 ggplot(data = res_data,
        mapping = aes(x = gender, y = ratio, fill = gender)) +
     geom_boxplot() +                            # boxplot visualisatie
@@ -243,60 +209,15 @@ Beantwoord deze vragen:
 
 ### Bronnen van variatie
 
-#### Fysiek:
-
-* Leeftijd
-* Genetische verschillen
-* Gezondheid
-
-#### Omgeving:
-
-* Temperatuur
-* Voeding
-* Leefomgeving
-
-#### Meetfouten:
-
-* Onnauwkeurige meetgereedschap
-* Verschillende meetmethodes
-* Menselijke fouten
-
+Er zijn een paar dingen die voor verschil kunnen zorgen. Mensen zijn natuurlijk niet allemaal hetzelfde gebouwd. Ook kan een meter net iets anders meten dan een andere meter. Verder maakt houding uit, want als iemand niet helemaal recht staat of zijn arm net anders houdt, verandert de uitkomst al snel. Afronden op hele centimeters geeft ook extra ruis. In onze data zien we wel kleine verschillen tussen de meters, maar die zijn niet groot genoeg om op te vallen. De metingen lijken dus best goed op elkaar.
 
 ### De hypothese aannemen?
 
-``` {r, echo=F}
-ggplot(data = res_data,
-       mapping = aes(x = gender, y = ratio, fill = gender)) +
-    geom_boxplot() +                            # boxplot visualisatie
-    geom_point() +                              # met punten erbij
-    labs(x = "Gender", y = "ratio lengte/armlengte") + # as-labels
-    theme_minimal()                             # beetje schoner plotje maken
-```
-Uit de plot komt dat er geen groot verschil zit tussen de ratios, maar het blijkt wel dat mannen vaker even lange armen hebben. 
-
-De hypothese is "Er is een verschil tussen de verhouding van armlengte tot lichaamslengte bij mannen en vrouwen.".
-
-In dit geval is de hypothese bewezen, omdat het gemiddelde van de mannen hoger ligt dan bij de vrouwen.
-
-
-
-#### Meter verschil:
-``` {r, echo=F}
-# idk
-```
+We hebben gekeken naar de verhouding tussen lengte en armlengte. Bij mannen is die ratio iets hoger dan bij vrouwen, maar het verschil is niet groot genoeg om op te vallen. De p-waarde ligt boven 0.05, dus we nemen de nulhypothese niet aan. Ook tussen de twee meters zien we geen groot verschil. De metingen komen dus redelijk goed overeen.
 
 ## Reflectie op het experiment
 
 ::: info
-Bespreek in je groep de volgende vragen en voeg de antwoorden toe aan je uitgewerkte onderzoeksdocument.
-
-1.  Zijn de metingen tussen de verschillende meters ook (significant) verschillend? Zo ja, waardoor zou je de verschillen kunnen verklaren?
-
-2.  Onderzoek de verschillen tussen mannen en vrouwen met betrekking tot hand lengte, handbreedte en de ratio.
-
-3.  Zou je het protocol aanpassen na deze ervaring, of was hij voldoende duidelijk en reproduceerbaar?
-:::
-
 ### Wat hebben we gedaan?
 We hebben gekeken naar de verhouding tussen armlengte en lichaamslengte bij mannen en vrouwen. Ook hebben we twee meters gebruikt om te zien of hun metingen ongeveer gelijk zijn.
 
@@ -314,3 +235,4 @@ We hebben geleerd dat kleine meetverschillen snel ontstaan. Daarom is een protoc
 
 ### Conclusie
 Ons onderzoek laat geen groot verschil zien tussen mannen en vrouwen in deze verhouding. De nulhypothese moet niet verworpen worden.
+:::
