@@ -54,8 +54,42 @@ We maken 20 metingen per groep, dus 40 samples in totaal.
 
 ### Ontwerp het protocol
 
-#### Protocol voor meting armlengte en lichaamslengte
-Om te garanderen dat verschillende onderzoekers de metingen op dezelfde reproduceerbare manier doen wordt de uitvoering van het experiment in een protocol vastgelegd.
+#### Doel
+We willen kijken of er verschil is tussen mannen en vrouwen in de verhouding tussen armlengte en lichaamslengte.
+
+#### Wat meten we?
+- lichaamslengte in cm
+- armlengte in cm
+- gender
+- meter-ID
+- subject-ID
+
+#### Wat hebben we nodig?
+- meetlint
+- spreadsheet om data op te schrijven
+- proefpersonen
+
+#### Hoe meten we?
+1. Geef elke proefpersoon een subject-ID.
+2. Vraag of de persoon mee wil doen.
+3. Meet eerst de lichaamslengte.
+5. Meet daarna de armlengte.
+6. Laat de arm op schouderhoogte uitstrekken.
+8. Laat de tweede meter dezelfde persoon ook meten.
+
+#### Afspraken
+- Gebruik steeds dezelfde meet afspraken.
+- Meet zo precies mogelijk.
+- Zet geen namen in de data.
+- Gebruik alleen een subject-ID.
+- Wissel af zodat iedereen evenveel meet.
+
+#### Controle
+Aan het einde kijken we of alles klopt.
+- Zijn er genoeg metingen?
+- Zijn de subject-ID's uniek?
+- Zitten er rare waarden tussen?
+- Zijn de metingen van de twee meters ongeveer gelijk?
 
 ##### Benodigdheden
 
@@ -110,8 +144,8 @@ m; 191, 54, 507656, 2
 
 Om data vanuit een tekstbestand in te lezen kan je dit codeblok gebruiken, aannemend dat je data er exact zo uitzien als in bovenstaande voorbeeld:
 
-```{r demo-data-inlees, eval=FALSE}
-data_file <- "C:/Users/jesse/Documents/Code/4_semester/meten.csv"
+```{r demo-data-inlees, echo=FALSE}
+data_file <- "meten.csv"
 
 #data format: gender;lengte;l arm;meter;Id
 res_data <- read.table(file = data_file,
@@ -126,7 +160,7 @@ Je hebt je data verzameld en ingelezen. Nu is het tijd om er een eerste verkenni
 
 Allereerst berekenen we de lengte/arm-lengte ratio, want dat was de onderzoeksvraag. Onderstaande code voegt een extra kolom toe aan de dataframe.
 
-```{r lab-head-blegh, eval=FALSE}
+```{r lab-head-blegh, echo=FALSE}
   res_data$ratio <- res_data$lengte / res_data$"l.arm"
   head(res_data)
 ```
@@ -134,7 +168,7 @@ Dit geeft per subject een ratio tussen de lengte en de armlengte.
 
 Dan kunnen we nog kijken naar de gemiddelde lengte en armlengte per gender:
 
-```{r lab-split, eval=FALSE}
+```{r lab-split, echo=FALSE}
 #split over gender into list of dataframes
 gender_split_data <- split(x = res_data,
                            f = res_data$gender)
@@ -148,7 +182,7 @@ sapply(X = gender_split_data,
        })
 ```
 
-```{r, eval=FALSE}
+```{r, echo=FALSE}
 library(ggplot2)
 # maak de plot en voeg lagen toe
 ggplot(data = res_data,
@@ -157,7 +191,7 @@ ggplot(data = res_data,
     labs(x = "Gender", y = "Arm length (cm)") +  # as-labels
     theme_minimal()                             # beetje schoner plotje maken
 ```
-``` {r eval=FALSE}
+``` {r echo=FALSE}
 ggplot(data = res_data,
        mapping = aes(x = gender, y = lengte, fill = gender)) +
     geom_boxplot() +                            # boxplot visualisatie
@@ -167,7 +201,7 @@ ggplot(data = res_data,
 ```
 Deze plots geven weer dat er wel een degelijk verschil tussen de groepen is.
 
-``` {r, eval=FALSE}
+``` {r, echo=F}
 ggplot(data = res_data,
        mapping = aes(x = gender, y = ratio, fill = gender)) +
     geom_boxplot() +                            # boxplot visualisatie
@@ -209,11 +243,47 @@ Beantwoord deze vragen:
 
 ### Bronnen van variatie
 
-ONDERZOEK BRONNEN VAN VARIATIE BESPREEK DIT KORT
+#### Fysiek:
+
+* Leeftijd
+* Genetische verschillen
+* Gezondheid
+
+#### Omgeving:
+
+* Temperatuur
+* Voeding
+* Leefomgeving
+
+#### Meetfouten:
+
+* Onnauwkeurige meetgereedschap
+* Verschillende meetmethodes
+* Menselijke fouten
+
 
 ### De hypothese aannemen?
 
-VOER RELEVANTE STATISTISCHE TESTS UIT
+``` {r, echo=F}
+ggplot(data = res_data,
+       mapping = aes(x = gender, y = ratio, fill = gender)) +
+    geom_boxplot() +                            # boxplot visualisatie
+    geom_point() +                              # met punten erbij
+    labs(x = "Gender", y = "ratio lengte/armlengte") + # as-labels
+    theme_minimal()                             # beetje schoner plotje maken
+```
+Uit de plot komt dat er geen groot verschil zit tussen de ratios, maar het blijkt wel dat mannen vaker even lange armen hebben. 
+
+De hypothese is "Er is een verschil tussen de verhouding van armlengte tot lichaamslengte bij mannen en vrouwen.".
+
+In dit geval is de hypothese bewezen, omdat het gemiddelde van de mannen hoger ligt dan bij de vrouwen.
+
+
+
+#### Meter verschil:
+``` {r, echo=F}
+# idk
+```
 
 ## Reflectie op het experiment
 
@@ -226,3 +296,21 @@ Bespreek in je groep de volgende vragen en voeg de antwoorden toe aan je uitgewe
 
 3.  Zou je het protocol aanpassen na deze ervaring, of was hij voldoende duidelijk en reproduceerbaar?
 :::
+
+### Wat hebben we gedaan?
+We hebben gekeken naar de verhouding tussen armlengte en lichaamslengte bij mannen en vrouwen. Ook hebben we twee meters gebruikt om te zien of hun metingen ongeveer gelijk zijn.
+
+### Wat zien we in de data?
+De ratio is bij mannen iets hoger dan bij vrouwen. Toch is dat verschil niet groot genoeg om op te vallen. We zien dus geen duidelijk verschil tussen de groepen.
+
+### Wat viel op?
+De metingen van de twee meters lijken op elkaar. Dat is goed, want dan lijkt het protocol goed te werken.
+
+### Wat kan beter?
+Het protocol kan nog iets duidelijker. Het helpt als we preciezer afspreken hoe we meten. Meten in millimeters zou ook beter zijn dan afronden op hele centimeters.
+
+### Wat hebben we geleerd?
+We hebben geleerd dat kleine meetverschillen snel ontstaan. Daarom is een protocol belangrijk. Ook hebben we gezien dat een klein verschil in de data niet meteen betekent dat het iets zegt.
+
+### Conclusie
+Ons onderzoek laat geen groot verschil zien tussen mannen en vrouwen in deze verhouding. De nulhypothese moet niet verworpen worden.

@@ -1,4 +1,4 @@
-data_file <- "/Users/robinoffringa/biometrie/ruwe_data/meten.csv"
+data_file <- "C:/Users/jesse/documents/code/4_semester/biometrie/ruwe_data/meten.csv"
 
 #data format: gender;lengte;l arm;meter;Id
 res_data <- read.table(file = data_file,
